@@ -10,6 +10,7 @@ TagManager:
   - Mana
   - Fireball
   - Iceball
+  - Turret
   layers:
   - Default
   - TransparentFX

@@ -33,17 +33,24 @@ public class BallController : MonoBehaviour
         gameObject.SetActive(false);
         if (other.CompareTag("Enemy"))
         {
-            Debug.Log("Loo");
+
             //GameObject particles = Instantiate(impactParticle, transform.position, Quaternion.identity);
             other.GetComponent<EnemyController>().DamageEnemy(damage);
             
         }
         else if (other.CompareTag("Player"))
         {
-            Debug.Log("Loo");
+
             other.GetComponent<PlayerController>().DamagePlayer(damage);
            
         }
-        
+        else if (other.CompareTag("Turret"))
+        {
+
+            //GameObject particles = Instantiate(impactParticle, transform.position, Quaternion.identity);
+            other.GetComponent<TurretControl>().DamageEnemy(damage);
+
+        }
+
     }
 }

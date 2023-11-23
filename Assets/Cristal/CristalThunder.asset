@@ -15,7 +15,7 @@ MonoBehaviour:
   name: CristalThunder
   damage: 10
   maxDistance: 30
-  ballSpeed: 60
+  ballSpeed: 10
   ballTime: 1
   useMana: 6
   rate: 6

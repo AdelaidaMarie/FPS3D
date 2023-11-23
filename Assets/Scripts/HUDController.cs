@@ -7,6 +7,7 @@ public class HUDController : MonoBehaviour
 {
     [SerializeField]private Slider healthbar;
     [SerializeField]private Slider manabar;
+    [SerializeField] private Slider staminabar;
     public TextMeshProUGUI scoreText;
     [SerializeField] private Image damageFlash;
     [SerializeField] private float damageTime;
@@ -25,6 +26,7 @@ public class HUDController : MonoBehaviour
         
         healthbar.maxValue = GameObject.Find("Player").GetComponent<PlayerController>().MaxLives;
         manabar.maxValue = GameObject.Find("Player").GetComponent<PlayerController>().MaxMana;
+        staminabar.maxValue = GameObject.Find("Player").GetComponent<PlayerController>().MaxStamina;
     }
 
     // Update is called once per frame
@@ -47,6 +49,10 @@ public class HUDController : MonoBehaviour
     public void UpdateManaBar(int currentMana)
     {
         manabar.value = currentMana;
+    }
+    public void UpdateStaminaBar(float currentStamina)
+    {
+        staminabar.value = currentStamina;
     }
     public void ShowDamageFlash()
     {

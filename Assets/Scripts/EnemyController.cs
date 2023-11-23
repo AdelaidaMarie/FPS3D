@@ -34,6 +34,7 @@ public class EnemyController : MonoBehaviour
         currentLife -= quantity;
         if (currentLife <= 0)
         {
+            Debug.Log("JAJAJA");
             GameManager.instance.UpdateScore(point);
             Destroy(gameObject);
         }

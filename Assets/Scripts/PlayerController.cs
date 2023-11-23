@@ -24,14 +24,26 @@ public class PlayerController : MonoBehaviour
     public int currentMana;
     public int maxMana;
     public int minMana;
+    public float maxStamina = 100;
+    public float minStamina = 0;
+    public float currentStamina = 100;
+    public float sprintSpeed = 0;
+    bool isSprint;
     public ParticleSystem Thundar;
     [HideInInspector]public Cristal cristal1;
     [HideInInspector]public Cristal cristal2;
     [HideInInspector]public Cristal cristal3;
     public GameObject Liz;
     public GameObject LizHurt;
+    public float dashSpeed;
+    public GameObject explosion;
+    public GameObject elemental;
+    public ParticleSystem effect;
+    public Transform outPosition;
+    public GameObject TeleBullet;
     public int MaxLives { get => maxLife; set => maxLife = value; }
     public int MaxMana { get => maxMana; set => maxMana = value; }
+    public float MaxStamina { get => maxStamina; set => maxStamina = value; }
     private void Awake()
     {
         
@@ -45,10 +57,17 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        isSprint = false;
         CameraView();
         HUDController.instance.UpdateHealthBar(MaxLives);
         HUDController.instance.UpdateManaBar(MaxMana);
-        
+        HUDController.instance.UpdateStaminaBar(MaxStamina);
+
+    }
+    private void Dashing()
+    {
+        rb.AddForce(transform.forward * dashSpeed, ForceMode.Impulse);
+        effect.Play();
     }
     private IEnumerator SpawnTimer(float time)
     {
@@ -63,6 +82,10 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(currentStamina > maxStamina)
+        {
+            currentStamina = maxStamina;
+        }
         Hurt();
         if(currentMana < 10)
         {
@@ -83,10 +106,35 @@ public class PlayerController : MonoBehaviour
         }
         HUDController.instance.UpdateHealthBar(currentLives);
         HUDController.instance.UpdateManaBar(currentMana);
+        HUDController.instance.UpdateStaminaBar(currentStamina);
         MovePlayer();
         if (Input.GetButtonDown("Jump"))
         {
             Jump();
+        }
+        if (Input.GetKey(KeyCode.LeftShift) && currentStamina > 10)
+        {
+            isSprint = true;
+            
+            
+        } else {
+           
+            isSprint = false;
+        }
+        if (isSprint)
+        {
+            speed = sprintSpeed;
+            currentStamina -= 10 * Time.deltaTime;
+            if (currentStamina < 50)
+            {
+                isSprint = false;
+            }
+        }
+        else
+        {
+            isSprint = false;
+            speed = 6;
+            currentStamina += 1 * Time.deltaTime;
         }
         CameraView();
         if (Input.GetButtonDown("Fire1"))
@@ -114,9 +162,24 @@ public class PlayerController : MonoBehaviour
         }
         if (Input.GetButtonDown("Fire2"))
         {
-            float flash = 100f;
-            float x = Input.GetAxis("Horizontal");
-            Vector3 dash = (transform.right * x) * flash;
+            if (Fire.active && currentMana > 3)
+            {
+                currentMana = currentMana - cristal1.mana;
+                Instantiate(explosion, outPosition.position + new Vector3(1, 0, 0), Quaternion.identity);
+                
+            }
+            else if (Ice.active && currentMana > 10)
+            {
+                currentMana = currentMana - 10;
+                Instantiate(elemental, outPosition.position + new Vector3(3, 2, 0), Quaternion.identity);
+            }
+            else if (Thunder.active && currentMana > 1)
+            {
+                currentMana--;
+                //Dashing();
+                //Instantiate(TeleBullet, outPosition.position + new Vector3(1, 0, 0), Quaternion.identity);
+                cristal3.Shoot2();
+            }
         }
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
@@ -137,8 +200,7 @@ public class PlayerController : MonoBehaviour
             Thunder.SetActive(true);
         }
     }
-    
-        
+
     
     /// <summary>
     /// Player Movement
@@ -150,6 +212,8 @@ public class PlayerController : MonoBehaviour
         Vector3 direction = (transform.right * x + transform.forward * z).normalized * speed;
         direction.y = rb.velocity.y;
         rb.velocity = direction;
+
+
     }
     private void Hurt()
     {

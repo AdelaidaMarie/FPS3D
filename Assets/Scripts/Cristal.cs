@@ -14,6 +14,7 @@ public class Cristal : MonoBehaviour
     [HideInInspector]public float ballTime;
     private ObjectPool poolObjects;
     public Transform outPosition;
+    public GameObject TeleBullet;
     private void Awake()
     {
             poolObjects = GetComponent<ObjectPool>();
@@ -27,7 +28,7 @@ public class Cristal : MonoBehaviour
         damage = cristaldata.damage;
         ballSpeed = cristaldata.ballSpeed;
         ballTime = cristaldata.ballTime;
-        Debug.Log(cristaldata.damage);
+ 
     }
     public void Shoot()
     {
@@ -38,6 +39,7 @@ public class Cristal : MonoBehaviour
         ball.GetComponent<BallController>().Damage = damage;
         ball.GetComponent<Rigidbody>().velocity = outPosition.forward *
             ballSpeed;
+
         /* GameObject ball = poolObjects.GetGameObject();
          ball.transform.position = outPosition.position;
          ball.transform.rotation = outPosition.rotation;
@@ -45,5 +47,13 @@ public class Cristal : MonoBehaviour
          ball.GetComponent<Rigidbody>().velocity = outPosition.forward *
              ballSpeed;*/
     }
+    public void Shoot2()
+    {
+        TeleBullet = Instantiate(TeleBullet);
 
+        TeleBullet.transform.position = outPosition.position;
+        TeleBullet.transform.rotation = outPosition.rotation;
+        TeleBullet.GetComponent<Rigidbody>().velocity = outPosition.forward *
+            ballSpeed;
+    }
 }
