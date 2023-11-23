@@ -16885,6 +16885,10 @@ MonoBehaviour:
   blendDistance: 0
   weight: 1
   sharedProfile: {fileID: 11400000, guid: 866d4e1a391f38f45a9bd37a8c360dbb, type: 2}
+  m_Colliders: []
+  m_PreviousLayer: 0
+  m_PreviousPriority: 0
+  m_InternalProfile: {fileID: 0}
 --- !u!1 &852234076
 GameObject:
   m_ObjectHideFlags: 0
