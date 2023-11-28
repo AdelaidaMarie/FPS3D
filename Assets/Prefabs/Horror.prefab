@@ -260,7 +260,6 @@ GameObject:
   - component: {fileID: 7311897285618205903}
   - component: {fileID: 1635238725537726125}
   - component: {fileID: 6010384680692909915}
-  - component: {fileID: 5389194134818462305}
   - component: {fileID: 3882696126806773302}
   m_Layer: 0
   m_Name: Pata2
@@ -334,27 +333,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &5389194134818462305
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2557003119859471889}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!95 &3882696126806773302
 Animator:
   serializedVersion: 5
@@ -557,9 +535,10 @@ GameObject:
   - component: {fileID: 4631164195351877032}
   - component: {fileID: 2117640410680618384}
   - component: {fileID: 3537571577813049476}
+  - component: {fileID: 1344244848771773028}
   m_Layer: 0
   m_Name: Horror
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -585,6 +564,7 @@ Transform:
   - {fileID: 7164855765881289481}
   - {fileID: 2346913040533877539}
   - {fileID: 7311897285618205903}
+  - {fileID: 8460140535058815909}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -91.499, z: 0}
 --- !u!65 &601844561074624300
@@ -677,7 +657,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87c01061b5f261e4d8748eddf394d11c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  outPosition: {fileID: 0}
+  outPosition: {fileID: 8460140535058815909}
   currentAmmo: 3
   maxAmmo: 3
   infiniteAmmo: 1
@@ -749,6 +729,20 @@ NavMeshAgent:
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &1344244848771773028
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5014089805656774085}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a5b8f801260b9748b6f8a6ab45ad67f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefabObject: {fileID: 5715811159554717387, guid: 5d6eb66b0ec652a40ad3d6ba38e1acc0, type: 3}
+  objectNumberOnStart: 5
 --- !u!1 &6542595351784632029
 GameObject:
   m_ObjectHideFlags: 0
@@ -760,7 +754,6 @@ GameObject:
   - component: {fileID: 2346913040533877539}
   - component: {fileID: 6246522450773872479}
   - component: {fileID: 6924531242554969777}
-  - component: {fileID: 7109965254871206727}
   - component: {fileID: 201523658466116253}
   m_Layer: 0
   m_Name: Pata1
@@ -834,27 +827,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &7109965254871206727
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6542595351784632029}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!95 &201523658466116253
 Animator:
   serializedVersion: 5
@@ -876,6 +848,37 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!1 &7293456429117885211
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8460140535058815909}
+  m_Layer: 0
+  m_Name: OutRange
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8460140535058815909
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7293456429117885211}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.63, y: 4.27, z: 2.127}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5683103682357628799}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8653598834279933833
 GameObject:
   m_ObjectHideFlags: 0
