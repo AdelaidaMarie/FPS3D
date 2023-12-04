@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 public class PlayerController : MonoBehaviour
 {
     public float speed;
@@ -12,7 +13,7 @@ public class PlayerController : MonoBehaviour
     public float maxViewX;
     public int currentLives;
 
-    [SerializeField] private int maxLife;
+    public int maxLife;
     public int minLife;
     public float minViewX;
     private float rotationX;
@@ -27,7 +28,7 @@ public class PlayerController : MonoBehaviour
     public float maxStamina = 100;
     public float minStamina = 0;
     public float currentStamina = 100;
-    public float sprintSpeed = 0;
+    private float sprintSpeed = 10;
     bool isSprint;
     public ParticleSystem Thundar;
     [HideInInspector]public Cristal cristal1;
@@ -35,70 +36,108 @@ public class PlayerController : MonoBehaviour
     [HideInInspector]public Cristal cristal3;
     public GameObject Liz;
     public GameObject LizHurt;
-    public float dashSpeed;
     public GameObject explosion;
     public GameObject elemental;
     public ParticleSystem effect;
     public Transform outPosition;
-    public GameObject TeleBullet;
+    bool resting;
+    public int point = 10;
+    public GameManager gameManager;
+    private bool swing;
+    bool end;
+    public Animator endScene;
+    public GameObject HUD;
+    bool stop;
+    public GameObject ButtonEv;
     public int MaxLives { get => maxLife; set => maxLife = value; }
     public int MaxMana { get => maxMana; set => maxMana = value; }
     public float MaxStamina { get => maxStamina; set => maxStamina = value; }
     private void Awake()
     {
         
+        Time.timeScale = 1f;
         rb = GetComponent<Rigidbody>();
         camera = Camera.main;
         Cursor.lockState = CursorLockMode.Locked;
         cristal1 = Fire.GetComponent<Cristal>();
         cristal2 = Ice.GetComponent<Cristal>();
         cristal3 = Thunder.GetComponent<Cristal>();
+        gameManager = gameManager.GetComponent<GameManager>();
     }
     // Start is called before the first frame update
     void Start()
     {
+        
+        swing = false;
         isSprint = false;
         CameraView();
         HUDController.instance.UpdateHealthBar(MaxLives);
         HUDController.instance.UpdateManaBar(MaxMana);
         HUDController.instance.UpdateStaminaBar(MaxStamina);
-
+        StartCoroutine(StartCine(3f));
     }
-    private void Dashing()
+    /*private void Dashing()
     {
         rb.AddForce(transform.forward * dashSpeed, ForceMode.Impulse);
         effect.Play();
+    }*/
+    /// <summary>
+    /// Es cine
+    /// </summary>
+    IEnumerator StartCine(float time)
+    {
+        end = true;
+        endScene.Play("Fade5");
+        HUD.SetActive(false);
+        yield return new WaitForSeconds(time);
+        end = false;
+        HUD.SetActive(true);
+        Debug.Log("Start");
     }
-    private IEnumerator SpawnTimer(float time)
+    IEnumerator EndCine(float time)
+    {
+        end = true;
+        HUD.SetActive(false);
+        endScene.Play("Fade4");
+        yield return new WaitForSeconds(time);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+    }
+    IEnumerator SpawnTimer(float time)
     {
 
-        while (true)
-        {
+        
             yield return new WaitForSeconds(time);
             currentMana = currentMana + regMana;
+        stop = false;
+        yield break;
+
             
-        }
     }
     // Update is called once per frame
     void Update()
     {
+        if (currentLives <= minLife)
+        {
+            end = true;
+        }
         if(currentStamina > maxStamina)
         {
             currentStamina = maxStamina;
         }
+        if (currentMana > maxMana)
+        {
+            currentMana = maxMana;
+            stop = true;
+        }
         Hurt();
         if(currentMana < 10)
         {
-            StartCoroutine(SpawnTimer(10f));
-        }
-        else if(currentMana > maxMana)
-        {
-            currentMana = maxMana;
-            StopAllCoroutines();
-        }
-        else 
-        {
-            StopAllCoroutines();
+            
+            if (!stop)
+            {
+                StartCoroutine(SpawnTimer(5f));
+                stop = true;
+            }
         }
         if(currentLives > maxLife)
         {
@@ -107,12 +146,15 @@ public class PlayerController : MonoBehaviour
         HUDController.instance.UpdateHealthBar(currentLives);
         HUDController.instance.UpdateManaBar(currentMana);
         HUDController.instance.UpdateStaminaBar(currentStamina);
-        MovePlayer();
-        if (Input.GetButtonDown("Jump"))
+        if (!end && Time.timeScale == 1f)
+        {
+            MovePlayer();
+        }
+        if (Input.GetButtonDown("Jump") && !end)
         {
             Jump();
         }
-        if (Input.GetKey(KeyCode.LeftShift) && currentStamina > 10)
+        if (Input.GetKey(KeyCode.LeftShift) && currentStamina > 10 && !swing && !end)
         {
             isSprint = true;
             
@@ -133,25 +175,28 @@ public class PlayerController : MonoBehaviour
         else
         {
             isSprint = false;
-            speed = 6;
-            currentStamina += 1 * Time.deltaTime;
+            speed = 3;
+            currentStamina += 5 * Time.deltaTime;
         }
-        CameraView();
-        if (Input.GetButtonDown("Fire1"))
+        if (Time.timeScale == 1f && !end)
+        {
+            CameraView();
+        }
+        if (Input.GetButtonDown("Fire1") && !end)
         { 
-                if (Fire.active && currentMana > 3)
+                if (Fire.activeSelf && currentMana > 3)
                 {
                     currentMana = currentMana - cristal1.mana;
 
                     cristal1.Shoot();
                 }
-                else if (Ice.active && currentMana > 2)
+                else if (Ice.activeSelf && currentMana > 2)
                 {
                     currentMana = currentMana - cristal2.mana;
 
                     cristal2.Shoot();
                 }
-                else if (Thunder.active && currentMana > 8)
+                else if (Thunder.activeSelf && currentMana > 8)
                 {
                 Thundar.Play();
                     currentMana = currentMana - cristal3.mana;
@@ -160,20 +205,20 @@ public class PlayerController : MonoBehaviour
                 
                 }
         }
-        if (Input.GetButtonDown("Fire2"))
+        if (Input.GetButtonDown("Fire2") && !end)
         {
-            if (Fire.active && currentMana > 3)
+            if (Fire.activeSelf && currentMana > 3)
             {
                 currentMana = currentMana - cristal1.mana;
                 Instantiate(explosion, outPosition.position + new Vector3(1, 0, 0), Quaternion.identity);
                 
             }
-            else if (Ice.active && currentMana > 10)
+            else if (Ice.activeSelf && currentMana > 10)
             {
                 currentMana = currentMana - 10;
                 Instantiate(elemental, outPosition.position + new Vector3(3, 2, 0), Quaternion.identity);
             }
-            else if (Thunder.active && currentMana > 1)
+            else if (Thunder.activeSelf && currentMana > 1)
             {
                 currentMana--;
                 //Dashing();
@@ -181,25 +226,37 @@ public class PlayerController : MonoBehaviour
                 cristal3.Shoot2();
             }
         }
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        if (Input.GetKeyDown(KeyCode.Alpha1) && !end)
         {
             Fire.SetActive(true);
             Ice.SetActive(false);
             Thunder.SetActive(false);
         }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
+        if (Input.GetKeyDown(KeyCode.Alpha2) && !end)
         {
             Fire.SetActive(false);
             Ice.SetActive(true);
             Thunder.SetActive(false);
         }
-        if (Input.GetKeyDown(KeyCode.Alpha3))
+        if (Input.GetKeyDown(KeyCode.Alpha3) && !end)
         {
             Fire.SetActive(false);
             Ice.SetActive(false);
             Thunder.SetActive(true);
         }
+        if (swing)
+        {
+            speed = 2f;
+        }
+        if (Input.GetKeyDown(KeyCode.F) && resting && gameManager.Score >= 11)
+        {
+            GameManager.instance.UpdateScore(-point);
+            currentLives = maxLife;
+            currentMana = MaxMana;
+            currentStamina = MaxStamina;
+        }
     }
+
 
     
     /// <summary>
@@ -212,8 +269,7 @@ public class PlayerController : MonoBehaviour
         Vector3 direction = (transform.right * x + transform.forward * z).normalized * speed;
         direction.y = rb.velocity.y;
         rb.velocity = direction;
-
-
+        
     }
     private void Hurt()
     {
@@ -254,10 +310,6 @@ public class PlayerController : MonoBehaviour
     // Rotate the camera
     camera.transform.localRotation = Quaternion.Euler(-rotationX, 0, 0);
         transform.eulerAngles += Vector3.up * y;
-        if(Time.timeScale == 0f)
-        {
-            camera.transform.rotation = Quaternion.Euler(0, 0, 0);
-        }
     }
     public void DamagePlayer(int quantity)
     {
@@ -282,6 +334,37 @@ public class PlayerController : MonoBehaviour
         {
             HUDController.instance.UpdateManaBar(currentMana);
             currentMana = currentMana + regMana;
+        }
+        if(other.gameObject.tag == "Water")
+        {
+            swing = true;
+        }
+        if (other.gameObject.tag == "RestArea")
+        {
+            resting = true;
+        }
+        if (other.gameObject.tag == "EndPoint")
+        {
+            StartCoroutine(EndCine(3f));
+        }
+        if (other.gameObject.tag == "Button")
+        {
+            ButtonEv.SetActive(true);
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.tag == "Water")
+        {
+            swing = false;
+        }
+        if (other.gameObject.tag == "RestArea")
+        {
+            resting = false;
+        }
+        if (other.gameObject.tag == "Button")
+        {
+            ButtonEv.SetActive(false);
         }
     }
 

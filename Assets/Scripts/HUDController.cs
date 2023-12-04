@@ -15,6 +15,7 @@ public class HUDController : MonoBehaviour
     private Coroutine dissapearCoroutine;
     public GameObject FailPanel;
     public GameObject GameManager;
+    public GameObject Scene;
     private void Awake()
     {
 
@@ -44,6 +45,8 @@ public class HUDController : MonoBehaviour
             GameManager.SetActive(false);
             Cursor.lockState = CursorLockMode.None;
             FailPanel.SetActive(true);
+            Time.timeScale = 0f;
+            Scene.SetActive(false);
         }
     }
     public void UpdateManaBar(int currentMana)

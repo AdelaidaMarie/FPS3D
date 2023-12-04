@@ -6,6 +6,7 @@ public class IceAnimation : MonoBehaviour
 {
     private Animator iceAnim;
     public bool activated;
+    public AudioSource crack;
     private void Awake()
     {
         iceAnim = GetComponentInChildren<Animator>();
@@ -31,10 +32,10 @@ public class IceAnimation : MonoBehaviour
     {
         if (other.CompareTag("Fireball") && !activated)
         {
-            Debug.Log("DAB");
+            crack.Play();
             activated = true;
             iceAnim.SetBool("Hot", true);
-            StartCoroutine(Burn(5f));
+            StartCoroutine(Burn(2.8f));
         }
     }
 }

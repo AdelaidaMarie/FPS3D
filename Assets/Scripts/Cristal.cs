@@ -15,6 +15,7 @@ public class Cristal : MonoBehaviour
     private ObjectPool poolObjects;
     public Transform outPosition;
     public GameObject TeleBullet;
+    public AudioSource shootSound;
     private void Awake()
     {
             poolObjects = GetComponent<ObjectPool>();
@@ -32,7 +33,7 @@ public class Cristal : MonoBehaviour
     }
     public void Shoot()
     {
-        Debug.Log(poolObjects);
+        shootSound.Play();
         GameObject ball = poolObjects.GetGameObject();
         ball.transform.position = outPosition.position;
         ball.transform.rotation = outPosition.rotation;

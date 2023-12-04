@@ -54,6 +54,7 @@ public class GameManager : MonoBehaviour
     public void UpdateScore(int points)
     {
        Score += points;
-       HUDController.instance.scoreText.text = "Points: " + Score;
+       HUDController.instance.scoreText.text = "Coins: " + Score;
     }
+    
 }

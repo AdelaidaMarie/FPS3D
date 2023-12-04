@@ -11,6 +11,10 @@ TagManager:
   - Fireball
   - Iceball
   - Turret
+  - Water
+  - RestArea
+  - EndPoint
+  - Button
   layers:
   - Default
   - TransparentFX

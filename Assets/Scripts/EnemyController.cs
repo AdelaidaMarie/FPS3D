@@ -29,12 +29,12 @@ public class EnemyController : MonoBehaviour
     public int point = 5;
     private Renderer enemyRenderer;
     private bool isFrozen = false;
+    public AudioSource roar;
     public void DamageEnemy(int quantity)
     {
         currentLife -= quantity;
         if (currentLife <= 0)
         {
-            Debug.Log("JAJAJA");
             GameManager.instance.UpdateScore(point);
             Destroy(gameObject);
         }
@@ -75,33 +75,30 @@ public class EnemyController : MonoBehaviour
     {
         RaycastHit hit;
         Vector3 direction = target.transform.position - transform.position;
-        if (isFrozen)
-        {
-            agent.SetDestination(transform.position);
-        }
-        else if (Physics.Raycast(transform.position, direction, out hit) && !isFrozen)
+        //if (isFrozen)
+        //{
+          //  agent.SetDestination(transform.position);
+        //}
+        if (Physics.Raycast(transform.position, direction, out hit) && !isFrozen)
         {
             if (hit.collider.CompareTag("Player") && hit.distance <= 10f)
             {
+                roar.Play();
                 agent.SetDestination(target.transform.position);
                 agent.stoppingDistance = 3f;
                 transform.LookAt(target.transform.position);
-                if (hit.distance <= 9f)
+                if (hit.distance <= 7f)
                 {
+                    
                     if (weapon.CanShoot())
                         weapon.Shoot();
                 }
             }
-            
             else
             {
                 agent.stoppingDistance = 1f;
-
             }
-
         }
-
-
     }
     IEnumerator Burn(float time)
     {
@@ -127,20 +124,13 @@ public class EnemyController : MonoBehaviour
         
         if (other.CompareTag("Fireball"))
         {
-            Debug.Log("Fire");
             //GameObject particles = Instantiate(impactParticle, transform.position, Quaternion.identity);
             StartCoroutine(Burn(3f));
-               
         }
         if (other.CompareTag("Iceball"))
         {
             isFrozen = true;
-            Debug.Log(isFrozen);
-            
             StartCoroutine(Frozen(10f));
-            
         }
-
-        
     }
 }

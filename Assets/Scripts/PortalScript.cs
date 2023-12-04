@@ -6,6 +6,7 @@ public class PortalScript : MonoBehaviour
 {
     public GameObject Player;
     public GameObject Portal;
+    public AudioSource teleporting;
     // Start is called before the first frame update
     void Start()
     {
@@ -21,7 +22,7 @@ public class PortalScript : MonoBehaviour
     {
         if (other.gameObject.tag == "Player")
         {
-
+            teleporting.Play();
             Player.transform.position = Portal.transform.position;
 
         }
