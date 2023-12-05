@@ -10,6 +10,9 @@ public class PuzzleScript : MonoBehaviour
     public GameObject Button4;
     bool Cinema;
     public GameObject Portal;
+    public GameObject textMission1;
+    public GameObject textMission2;
+    public GameObject Portal2;
     // Start is called before the first frame update
     void Start()
     {
@@ -23,6 +26,9 @@ public class PuzzleScript : MonoBehaviour
         {
             Cinema = true;
             Portal.SetActive(true);
+            textMission1.SetActive(false);
+            textMission2.SetActive(true);
+            Portal2.SetActive(false);
         }
 
     }

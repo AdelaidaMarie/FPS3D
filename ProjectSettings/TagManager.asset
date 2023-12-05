@@ -15,6 +15,7 @@ TagManager:
   - RestArea
   - EndPoint
   - Button
+  - Void
   layers:
   - Default
   - TransparentFX
