@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     public bool gamePaused;
     public static GameManager instance;
     public GameObject pauseText;
+    public GameObject scene;
     private void Awake()
     {
         instance = this;
@@ -31,17 +32,18 @@ public class GameManager : MonoBehaviour
         }
         
     }
+    //Pause system
     public void UpdateGamePause()
     {
         gamePaused = !gamePaused;
         if (!gamePaused)
         {
-         
+            scene.SetActive(true);
             pauseText.SetActive(false);
         }
         else
         {
-       
+            scene.SetActive(false);
             pauseText.SetActive(true);
         }
 
@@ -51,6 +53,7 @@ public class GameManager : MonoBehaviour
 
 
     }
+    //Update the system score
     public void UpdateScore(int points)
     {
        Score += points;

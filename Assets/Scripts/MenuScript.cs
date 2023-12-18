@@ -9,6 +9,7 @@ public class MenuScript : MonoBehaviour
     public GameObject credits;
     public GameObject start;
     public AudioSource startSound;
+    public GameObject tutorial;
     // Start is called before the first frame update
     void Start()
     {
@@ -45,5 +46,12 @@ public class MenuScript : MonoBehaviour
     {
         menu.SetActive(true);
         credits.SetActive(false);
+        tutorial.SetActive(false);
+    }
+    public void Tutorial()
+    {
+        menu.SetActive(false);
+        tutorial.SetActive(true);
     }
 }
+

@@ -22,7 +22,8 @@ public class PuzzleScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(!Button1.activeSelf && !Button2.activeSelf && !Button3.activeSelf && !Button4.activeSelf && !Cinema) 
+        //Puzzle completed
+        if (!Button1.activeSelf && !Button2.activeSelf && !Button3.activeSelf && !Button4.activeSelf && !Cinema) 
         {
             Cinema = true;
             Portal.SetActive(true);

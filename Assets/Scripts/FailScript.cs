@@ -11,4 +11,8 @@ public class FailScript : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
+    public void Quit()
+    {
+        SceneManager.LoadScene(1);
+    }
 }

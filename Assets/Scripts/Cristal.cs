@@ -48,6 +48,7 @@ public class Cristal : MonoBehaviour
          ball.GetComponent<Rigidbody>().velocity = outPosition.forward *
              ballSpeed;*/
     }
+    //Only for thunder crystal
     public void Shoot2()
     {
         TeleBullet = Instantiate(TeleBullet);

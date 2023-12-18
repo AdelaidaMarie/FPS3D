@@ -47,6 +47,7 @@ public class PlayerController : MonoBehaviour
     bool end;
     public Animator endScene;
     public GameObject HUD;
+
     bool stop;
     public GameObject ButtonEv;
     public int MaxLives { get => maxLife; set => maxLife = value; }
@@ -82,7 +83,7 @@ public class PlayerController : MonoBehaviour
         effect.Play();
     }*/
     /// <summary>
-    /// Es cine
+    /// Cinematic start/end level
     /// </summary>
     IEnumerator StartCine(float time)
     {
@@ -130,6 +131,7 @@ public class PlayerController : MonoBehaviour
             stop = true;
         }
         Hurt();
+        //Restore mana
         if(currentMana < 10)
         {
             
@@ -154,6 +156,9 @@ public class PlayerController : MonoBehaviour
         {
             Jump();
         }
+        ///<sumary>
+        ///Sprint lines code
+        /// </sumary>
         if (Input.GetKey(KeyCode.LeftShift) && currentStamina > 10 && !swing && !end)
         {
             isSprint = true;
@@ -182,7 +187,7 @@ public class PlayerController : MonoBehaviour
         {
             CameraView();
         }
-        if (Input.GetButtonDown("Fire1") && !end)
+        if (Input.GetButtonDown("Fire1") && !end && Time.timeScale == 1f)
         { 
                 if (Fire.activeSelf && currentMana > 3)
                 {
@@ -205,7 +210,8 @@ public class PlayerController : MonoBehaviour
                 
                 }
         }
-        if (Input.GetButtonDown("Fire2") && !end)
+        //Secondary Fire
+        if (Input.GetButtonDown("Fire2") && !end && Time.timeScale == 1f)
         {
             if (Fire.activeSelf && currentMana > 3)
             {
@@ -226,19 +232,20 @@ public class PlayerController : MonoBehaviour
                 cristal3.Shoot2();
             }
         }
-        if (Input.GetKeyDown(KeyCode.Alpha1) && !end)
+        //Change weapon
+        if (Input.GetKeyDown(KeyCode.Alpha1) && !end && Time.timeScale == 1f)
         {
             Fire.SetActive(true);
             Ice.SetActive(false);
             Thunder.SetActive(false);
         }
-        if (Input.GetKeyDown(KeyCode.Alpha2) && !end)
+        if (Input.GetKeyDown(KeyCode.Alpha2) && !end && Time.timeScale == 1f)
         {
             Fire.SetActive(false);
             Ice.SetActive(true);
             Thunder.SetActive(false);
         }
-        if (Input.GetKeyDown(KeyCode.Alpha3) && !end)
+        if (Input.GetKeyDown(KeyCode.Alpha3) && !end && Time.timeScale == 1f)
         {
             Fire.SetActive(false);
             Ice.SetActive(false);
@@ -248,6 +255,7 @@ public class PlayerController : MonoBehaviour
         {
             speed = 2f;
         }
+        //RestPoint
         if (Input.GetKeyDown(KeyCode.F) && resting && gameManager.Score >= 11)
         {
             GameManager.instance.UpdateScore(-point);
@@ -350,6 +358,10 @@ public class PlayerController : MonoBehaviour
         if (other.gameObject.tag == "Button")
         {
             ButtonEv.SetActive(true);
+        }
+        if (other.gameObject.tag == "Void")
+        {
+            currentLives = currentLives - 30;
         }
     }
     private void OnTriggerExit(Collider other)
